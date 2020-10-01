@@ -35,9 +35,9 @@ describe('hltv-api', () => {
     expect(response.length).toBeDefined()
     const result = response[0]
     expect(result.team1.name).toBeDefined()
-    expect(result.team1.crest).toContain(CONFIG.STATIC)
+    expect(result.team1.crest).toContain(CONFIG.CDN_STATIC)
     expect(result.team2.name).toBeDefined()
-    expect(result.team2.crest).toContain(CONFIG.STATIC)
+    expect(result.team2.crest).toContain(CONFIG.CDN_STATIC)
     expect(result.matchId).toContain('/matches/')
   })
 
@@ -304,10 +304,10 @@ describe('hltv-api', () => {
     expect(result.teams[0].name).toBeDefined()
     expect(result.teams[1].name).toBeDefined()
     if (result.teams[0].crest) {
-      expect(result.teams[0].crest).toContain(CONFIG.STATIC)
+      expect(result.teams[0].crest).toContain(CONFIG.CDN_STATIC)
     }
     if (result.teams[1].crest) {
-      expect(result.teams[1].crest).toContain(CONFIG.STATIC)
+      expect(result.teams[1].crest).toContain(CONFIG.CDN_STATIC)
     }
   })
 })

@@ -1,6 +1,7 @@
 export const CONFIG = {
   BASE: 'https://www.hltv.org',
   STATIC: 'https://static.hltv.org',
+  CDN_STATIC: 'https://img-cdn.hltv.org',
   RSS: '/rss',
   RESULTS: '/results',
   MATCHES: '/matches',
