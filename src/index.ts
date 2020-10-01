@@ -1,6 +1,6 @@
 import { getStatsByMatchId } from './match-stats'
 import { getMatches } from './matches'
-import { getResults } from './results'
+import { getResults, getResultsUntilMatchId } from './results'
 import getRSS from './rss'
 
 export default {
@@ -8,4 +8,5 @@ export default {
   getResults,
   getStatsByMatchId,
   getMatches,
+  getResultsUntilMatchId,
 }

@@ -50,6 +50,13 @@ describe('hltv-api', () => {
     await expect(HLTV.getResults()).rejects.toEqual(err)
   })
 
+  it('should have results until match id has been found', async () => {
+    const testData = await HLTV.getResults()
+    expect.hasAssertions()
+    const response = await HLTV.getResultsUntilMatchId(testData[81].matchId)
+    expect(response.length).toBe(81)
+  })
+
   it('should have match stats when we call `getMatches` with long Id', async () => {
     expect.hasAssertions()
     const response = await HLTV.getStatsByMatchId(
