@@ -18,6 +18,24 @@ interface IResult {
   }
   matchId: string
 }
+interface Dictionary<T> {
+  [Key: string]: T
+}
+
+const MONTHS: Dictionary<string> = {
+  January: '01',
+  February: '02',
+  March: '03',
+  April: '04',
+  May: '05',
+  June: '06',
+  July: '07',
+  August: '08',
+  September: '09',
+  October: '10',
+  November: '11',
+  December: '12',
+}
 
 function getResultData(element: cheerio.Element, $: cheerio.Root): IResult {
   const el = $(element).find('tr')
@@ -91,7 +109,7 @@ export async function getResults(): Promise<IResult[]> {
   }
 }
 
-async function recursiveFindMatchId(
+async function recursiveFindUntilMatchId(
   matchId: string,
   offset?: number
 ): Promise<IResult[]> {
@@ -115,7 +133,7 @@ async function recursiveFindMatchId(
     })
 
     if (!foundMatchId) {
-      const continuedResults: IResult[] = await recursiveFindMatchId(
+      const continuedResults: IResult[] = await recursiveFindUntilMatchId(
         matchId,
         offset ? offset + 100 : 100
       )
@@ -132,7 +150,61 @@ export async function getResultsUntilMatchId(
   matchId: string
 ): Promise<IResult[]> {
   try {
-    return await recursiveFindMatchId(matchId)
+    return await recursiveFindUntilMatchId(matchId)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+async function recursiveFindUntilDate(
+  untilDate: Date,
+  offset?: number
+): Promise<IResult[]> {
+  try {
+    const $ = await getCheerioRoot(offset)
+
+    let results: IResult[] = []
+    let foundDate: boolean = false
+
+    const resultElements = $('.results-holder > .results-all .result-con')
+    $(resultElements).each((_i, element) => {
+      const objData: IResult = getResultData(element, $)
+
+      const headline = $(element).siblings('.standard-headline').text()
+      const dateSplit = headline.substring(12).split(' ')
+      let day = '01'
+      const dayMatch = dateSplit[1].match(/[0-9]+/)
+      if (dayMatch) {
+        day = dayMatch[0].length === 1 ? `0${dayMatch[0]}` : dayMatch[0]
+      }
+      const date = new Date(`${dateSplit[2]}-${MONTHS[dateSplit[0]]}-${day}`)
+
+      if (untilDate.getTime() === date.getTime()) {
+        foundDate = true
+      }
+
+      if (!foundDate) {
+        results.push(objData)
+      }
+    })
+
+    if (!foundDate) {
+      const continuedResults: IResult[] = await recursiveFindUntilDate(
+        untilDate,
+        offset ? offset + 100 : 100
+      )
+      results = results.concat(continuedResults)
+    }
+
+    return results
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export async function getResultsUntilDate(untilDate: Date): Promise<IResult[]> {
+  try {
+    return await recursiveFindUntilDate(untilDate)
   } catch (error) {
     throw new Error(error)
   }
