@@ -18,7 +18,8 @@
     "build": "tsc -p .",
     "build:w": "tsc -p . -w",
     "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepare": "tsc -p ."
   },
   "files": [
     "dist",
