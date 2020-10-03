@@ -6,6 +6,7 @@ import {
   getResultsUntilDate,
 } from './results'
 import getRSS from './rss'
+import { getMatchMetadata } from './match-metadata'
 
 export default {
   getNews: async () => getRSS('news'),
@@ -14,4 +15,5 @@ export default {
   getMatches,
   getResultsUntilMatchId,
   getResultsUntilDate,
+  getMatchMetadata,
 }
