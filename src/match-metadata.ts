@@ -4,8 +4,8 @@ import { CONFIG } from './config'
 
 interface IMap {
   name: string
-  team1Score: number
-  team2Score: number
+  team1Score: number | null
+  team2Score: number | null
   pickedBy?: string
 }
 
@@ -76,8 +76,12 @@ function extractMaps(
 
     maps.push({
       name,
-      team1Score: parseInt(team1ScoreString, 10),
-      team2Score: parseInt(team2ScoreString, 10),
+      team1Score: Number.isNaN(parseInt(team1ScoreString, 10))
+        ? null
+        : parseInt(team1ScoreString, 10),
+      team2Score: Number.isNaN(parseInt(team2ScoreString, 10))
+        ? null
+        : parseInt(team2ScoreString, 10),
     })
   })
 
